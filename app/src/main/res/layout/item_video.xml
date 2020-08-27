@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
+
+    <com.cbsd.libra.view.RadiusImageView
+        android:id="@+id/itemVideoCoverIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        app:radius="5dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemVideoNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        tools:textColor="@color/black"
+        tools:text="视频一"
+        android:padding="5dp"/>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

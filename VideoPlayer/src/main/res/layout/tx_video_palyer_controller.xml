@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--底图-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/mImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@drawable/img_default"
+        android:scaleType="fitXY"
+        android:visibility="visible" />
+    <!--加载动画-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="27dp"
+            android:layout_height="10dp"
+            android:indeterminateDrawable="@drawable/loading" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mLoadText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="正在缓冲..."
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--改变播放位置-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mChangePositon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_radius_4"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mChangePositionCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textSize="28sp" />
+
+        <ProgressBar
+            android:id="@+id/mChangePositionProgress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="100dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:max="100"
+            android:progressDrawable="@drawable/pb_change" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--改变亮度-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mChangeBrightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_radius_4"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_palyer_brightness" />
+
+        <ProgressBar
+            android:id="@+id/mChangeBrightnessProgress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="100dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:max="100"
+            android:progressDrawable="@drawable/pb_change" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--改变声音-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mChangeVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_radius_4"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_palyer_volume" />
+
+        <ProgressBar
+            android:id="@+id/mChangeVolumeProgress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="100dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:max="100"
+            android:progressDrawable="@drawable/pb_change" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--播放完成-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#6c0b0b0b"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mReplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_player_replay"
+            android:drawablePadding="4dp"
+            android:padding="8dp"
+            android:text="重新播放"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="64dp"
+            android:drawableLeft="@drawable/ic_palyer_share"
+            android:drawablePadding="4dp"
+            android:padding="8dp"
+            android:text="分享"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--播放错误-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="播放错误，请重试。"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mRetry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_retry"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="5dp"
+            android:text="点击重试"
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--顶部控制区-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mTop"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/player_mask_top"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_player_back"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="真实死亡游戏“蓝鲸”疑似进入国内，家长们要注意了"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/battery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/battery_100" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@android:color/white"
+                android:textSize="10sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--底部控制区-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/mBottom"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/player_mask_bottom"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/mRestartPause"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_player_start" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/mSeek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:max="100"
+            android:maxHeight="1.5dp"
+            android:minHeight="1.5dp"
+            android:progressDrawable="@drawable/seek_progress"
+            android:thumb="@drawable/seek_thumb" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mClarity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:text="超清"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/mFullScreen"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_player_enlarge" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--右下角初始显示的总时长-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp"
+        android:padding="4dp"
+        android:text="00:00"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+    <!--中间开始播放按钮-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/center_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_player_center_start"
+        android:visibility="visible" />
+
+</RelativeLayout>
