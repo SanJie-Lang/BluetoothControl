@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dimen_25dp">25dp</dimen>
+    <dimen name="default_width">160dp</dimen>
+    <dimen name="default_height">240dp</dimen>
 </resources>

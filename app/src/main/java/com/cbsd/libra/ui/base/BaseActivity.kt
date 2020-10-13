@@ -25,7 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     abstract fun layoutId(): Int
-    abstract fun title(): String
+    abstract fun title(): String?
     abstract fun initView()
     abstract fun initData()
 

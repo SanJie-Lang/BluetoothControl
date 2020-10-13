@@ -305,6 +305,7 @@ class BleConnectionHelper(var mContext: Context) {
                         mListener?.discoveredServices()
                     }
                 }
+                mBluetoothGatt.requestMtu(206)
             }
             else ->{
                 //发现服务失败

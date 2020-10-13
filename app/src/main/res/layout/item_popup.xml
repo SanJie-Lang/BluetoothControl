@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/selecor_popup_item"
+    android:gravity="center"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemPopupColorHint"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@color/red"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemPopupColorNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:text="黄色"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

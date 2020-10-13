@@ -2,10 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/black">
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/mainVideoContainer"
@@ -14,18 +15,35 @@
 
         <com.cbsd.libra.view.DragVideoView
             android:id="@+id/mainVideoView"
-            android:layout_width="120dp"
-            android:layout_height="214dp" />
+            android:layout_width="214dp"
+            android:layout_height="120dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/mainRemoteControlBtn"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@color/transparent"
-            android:text="远程控制"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/mainThemeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="主题"
+                android:textColor="#343434"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/mainRemoteControlBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="远程控制"
+                android:textColor="#343434"
+                android:textSize="16sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </FrameLayout>
 
@@ -49,7 +67,8 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/mainLpControlContainer"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingTop="5dp"
@@ -66,6 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
+                        android:padding="5dp"
                         android:src="@mipmap/icon_top_arrow"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +95,9 @@
                         android:id="@+id/mainLeftBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
                         android:background="@color/transparent"
+                        android:padding="5dp"
                         android:src="@mipmap/icon_left_arrow"
                         app:layout_constraintEnd_toStartOf="@id/mainLeftHintBtn"
                         app:layout_constraintTop_toTopOf="@id/mainLeftHintBtn" />
@@ -95,7 +117,9 @@
                         android:id="@+id/mainRightBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
                         android:background="@color/transparent"
+                        android:padding="5dp"
                         android:src="@mipmap/icon_right_arrow"
                         app:layout_constraintStart_toEndOf="@id/mainLeftHintBtn"
                         app:layout_constraintTop_toTopOf="@id/mainLeftHintBtn" />
@@ -105,6 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
+                        android:padding="5dp"
                         android:src="@mipmap/icon_bottom_arrow"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +140,6 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
@@ -125,11 +149,12 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/mainWidthTitleTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:text="宽度"
-                            android:textColor="@color/white"
+                            android:textColor="#343434"
                             android:textSize="16sp" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -137,9 +162,10 @@
                             android:layout_width="46dp"
                             android:layout_height="30dp"
                             android:background="@drawable/selector_normal_button"
-                            android:text="—"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:text="-"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/mainWidthSeekBar"
@@ -147,6 +173,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:thumb="@mipmap/icon_thumb"
                             tools:progress="20" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -156,24 +183,26 @@
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/selector_normal_button"
                             android:text="+"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="15dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/mainHeightTitleTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:text="高度"
-                            android:textColor="@color/white"
+                            android:textColor="#343434"
                             android:textSize="16sp" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -181,9 +210,10 @@
                             android:layout_width="46dp"
                             android:layout_height="30dp"
                             android:background="@drawable/selector_normal_button"
-                            android:text="—"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:text="+"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/mainHeightSeekBar"
@@ -191,6 +221,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:thumb="@mipmap/icon_thumb"
                             tools:progress="20" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -199,9 +230,10 @@
                             android:layout_height="30dp"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/selector_normal_button"
-                            android:text="+"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                            android:text="-"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

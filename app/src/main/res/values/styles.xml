@@ -11,7 +11,7 @@
     <style name="FullScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">#000000</item>
+        <item name="android:windowBackground">#FFFFFF</item>
     </style>
 
     <style name="SeekBarStyle" >

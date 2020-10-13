@@ -8,16 +8,22 @@ import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelUuid
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.PopupWindow
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cbsd.libra.*
+import com.cbsd.libra.adapter.PopupAdapter
 import com.cbsd.libra.adapter.VideoAdapter
 import com.cbsd.libra.ble.BleConnectionHelper
 import com.cbsd.libra.ble.UUID
@@ -25,11 +31,13 @@ import com.cbsd.libra.ble.mGattServiceList
 import com.cbsd.libra.common.ACacheConfig
 import com.cbsd.libra.listener.TSeekBarChangeListener
 import com.cbsd.libra.model.BleData
+import com.cbsd.libra.model.Color
 import com.cbsd.libra.model.ViewPosition
 import com.cbsd.libra.utils.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.include_popup.view.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -40,10 +48,16 @@ class MainActivity : AppCompatActivity() {
     private var mContext: Context? = null
 
     private val videos = intArrayOf(
-        R.raw.video_10,
-        R.raw.video_9,
-        R.raw.video_13,
-        R.raw.video_11
+        R.raw.video_1,
+        R.raw.video_2,
+        R.raw.video_3,
+        R.raw.video_4,
+        R.raw.video_5
+    )
+    // 红黄蓝绿黑白
+    private val colors = arrayListOf(
+        Color("红色", R.color.red, R.color.white), Color("黄色", R.color.orange, R.color.white),
+        Color("蓝色", R.color.dodgerblue, R.color.white), Color("黑色", R.color.black, R.color.white), Color("白色", R.color.white, R.color.color_343434)
     )
     private var maxWidth = 0
     private var maxHeight = 0
@@ -110,6 +124,7 @@ class MainActivity : AppCompatActivity() {
                     when (newState) {
                         BluetoothProfile.STATE_CONNECTED -> {
                             LogUtils.d("蓝牙连接成功：${device?.address}")
+                            ToastUtils.show("${device?.name}与你连接成功")
                         }
                         BluetoothProfile.STATE_DISCONNECTED -> {
                             LogUtils.d("蓝牙连接断开：${device?.address}")
@@ -170,18 +185,30 @@ class MainActivity : AppCompatActivity() {
             LogUtils.d("接收到消息：${String(value!!)}")
             val data = BleData.instance(String(value))
             runOnUiThread {
-                when (data.action) {
+                LogUtils.d("data.a：${data.a}")
+                when (data.a) {
                     BleAction.DRAG -> {
-                        val viewPosition = GsonUtils.toObj(String(value), ViewPosition::class.java)
-                        val lp = mainVideoView.layoutParams as FrameLayout.LayoutParams
-                        lp.leftMargin = viewPosition.left
-                        lp.topMargin = viewPosition.top
-                        lp.rightMargin = viewPosition.right
-                        lp.bottomMargin = viewPosition.bottom
-                        mainVideoView.layoutParams = lp
+                        val position = data.b
+                        if (position.contains("#")) {
+                            val positionData = position.split("#")
+
+                            val lp = mainVideoView.layoutParams as FrameLayout.LayoutParams
+                            lp.leftMargin = positionData[0].toInt()
+                            lp.topMargin = positionData[1].toInt()
+                            lp.rightMargin = positionData[2].toInt()
+                            lp.bottomMargin = positionData[3].toInt()
+                            lp.width = positionData[4].toInt()
+                            lp.height = positionData[5].toInt()
+
+                            mainWidthSeekBar.progress =
+                                (lp.width.toDouble() / maxWidth * 100).toInt()
+                            mainHeightSeekBar.progress =
+                                (lp.height.toDouble() / maxHeight * 100).toInt()
+                            mainVideoView.layoutParams = lp
+                        }
                     }
                     BleAction.SWITCH_VIDEO -> {
-                        play(data.value as Int)
+                        play(data.b.toInt())
                     }
                     BleAction.MOVE_LEFT -> {
                         mainVideoView.toTheLeft(2)
@@ -196,13 +223,16 @@ class MainActivity : AppCompatActivity() {
                         mainVideoView.toTheBottom(2)
                     }
                     BleAction.CHANGE_WIDTH -> {
-                        mainWidthSeekBar.progress = data.value as Int
+                        mainWidthSeekBar.progress = data.b.toInt()
                     }
                     BleAction.CHANGE_HEIGHT -> {
-                        mainHeightSeekBar.progress = data.value as Int
+                        mainHeightSeekBar.progress = data.b.toInt()
                     }
                     BleAction.ZOOM -> {
 
+                    }
+                    BleAction.SWITCH_THEME -> {
+                        setTheme(colors[data.b.toInt()])
                     }
                 }
             }
@@ -339,10 +369,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mContext = this
         maxWidth = DisplayUtils.getScreenWidth(this)
         maxHeight = DisplayUtils.getScreenHeight(this)
         initBluetooth()//初始化蓝牙
+        if (ACache[this].getAsObject(ACacheConfig.POSITION) != null)
+            viewPosition = ACache[this].getAsObject(ACacheConfig.POSITION) as ViewPosition
+        if (viewPosition != null) {
+            useCache()
+            LogUtils.d("viewPosition：" + GsonUtils.toJson(viewPosition))
+        } else {
+            viewPosition = ViewPosition(0, 0, 0, 0, 0, 0)
+            mainWidthSeekBar.progress =
+                (DisplayUtils.dp2px(this, 214F).toDouble() / maxWidth * 100).toInt()
+            mainHeightSeekBar.progress =
+                (DisplayUtils.dp2px(this, 120F).toDouble() / maxHeight * 100).toInt()
+        }
         initView()
         click()
     }
@@ -362,24 +405,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mainVideoView.resume()
-        if (ACache[this].getAsObject(ACacheConfig.POSITION) != null)
-            viewPosition = ACache[this].getAsObject(
-                ACacheConfig.POSITION
-            ) as ViewPosition
-        if (viewPosition != null) {
-            useCache()
-            LogUtils.d(
-                "viewPosition：" + GsonUtils.toJson(
-                    viewPosition
-                )
-            )
-        } else {
-            viewPosition = ViewPosition(0, 0, 0, 0, 0, 0)
-            mainWidthSeekBar.progress =
-                (DisplayUtils.dp2px(this, 214F).toDouble() / maxWidth * 100).toInt()
-            mainHeightSeekBar.progress =
-                (DisplayUtils.dp2px(this, 120F).toDouble() / maxHeight * 100).toInt()
-        }
         mainVideoView.start()
         LogUtils.d("Life cycle onResume")
     }
@@ -389,7 +414,7 @@ class MainActivity : AppCompatActivity() {
         val videoAdapter = VideoAdapter(this)
         videoAdapter.addOnItemClickListener {
             play(it)
-            sendMessage("$it")
+            sendMessage(BleData(BleAction.SWITCH_VIDEO, it.toString()).toJson())
         }
         mainRv.adapter = videoAdapter
 
@@ -423,65 +448,73 @@ class MainActivity : AppCompatActivity() {
         mainLeftBtn.click {
             mainVideoView.toTheLeft(2)
             //需加入客户端 服务端判断
-            sendMessage(BleData(BleAction.MOVE_LEFT, 2).toJson())
+            sendMessage(BleData(BleAction.MOVE_LEFT, "2").toJson())
         }
         var leftDisposable: Disposable? = null
         mainLeftBtn.longClick {
             leftDisposable = DisposableUtils.createInterval(100, TimeUnit.MILLISECONDS) {
                 mainVideoView.toTheLeft(2)
+                sendMessage(BleData(BleAction.MOVE_LEFT, "2").toJson())
             }
         }
         mainLeftBtn.touchUp {
             if (leftDisposable != null && !leftDisposable!!.isDisposed) {
                 leftDisposable!!.dispose()
+                sendMessage(BleData(BleAction.LONG_STOP, "-1").toJson())
             }
         }
 
         mainUpBtn.click {
             mainVideoView.toTheTop(2)
-            sendMessage(BleData(BleAction.MOVE_TOP, 2).toJson())
+            sendMessage(BleData(BleAction.MOVE_TOP, "2").toJson())
         }
         var upDisposable: Disposable? = null
         mainUpBtn.longClick {
             upDisposable = DisposableUtils.createInterval(100, TimeUnit.MILLISECONDS) {
                 mainVideoView.toTheTop(2)
+                sendMessage(BleData(BleAction.MOVE_TOP, "2").toJson())
             }
         }
         mainUpBtn.touchUp {
             if (upDisposable != null && !upDisposable!!.isDisposed) {
                 upDisposable!!.dispose()
+                sendMessage(BleData(BleAction.LONG_STOP, "-1").toJson())
             }
         }
 
         mainRightBtn.click {
             mainVideoView.toTheRight(2)
-            sendMessage(BleData(BleAction.MOVE_RIGHT, 2).toJson())
+            sendMessage(BleData(BleAction.MOVE_RIGHT, "2").toJson())
         }
         var rightDisposable: Disposable? = null
         mainRightBtn.longClick {
             rightDisposable = DisposableUtils.createInterval(100, TimeUnit.MILLISECONDS) {
                 mainVideoView.toTheRight(2)
+                sendMessage(BleData(BleAction.MOVE_RIGHT, "2").toJson())
             }
         }
         mainRightBtn.touchUp {
             if (rightDisposable != null && !rightDisposable!!.isDisposed) {
                 rightDisposable!!.dispose()
+                sendMessage(BleData(BleAction.LONG_STOP, "2").toJson())
             }
         }
 
         mainBottomBtn.click {
             mainVideoView.toTheBottom(2)
-            sendMessage(BleData(BleAction.MOVE_BOTTOM, 2).toJson())
+            sendMessage(BleData(BleAction.MOVE_BOTTOM, "2").toJson())
         }
         var bottomDisposable: Disposable? = null
         mainBottomBtn.longClick {
             bottomDisposable = DisposableUtils.createInterval(100, TimeUnit.MILLISECONDS) {
                 mainVideoView.toTheBottom(2)
+                sendMessage(BleData(BleAction.MOVE_BOTTOM, "2").toJson())
             }
         }
         mainBottomBtn.touchUp {
             if (bottomDisposable != null && !bottomDisposable!!.isDisposed) {
                 bottomDisposable!!.dispose()
+                sendMessage(BleData(BleAction.LONG_STOP, "2").toJson())
             }
         }
 
@@ -489,7 +522,6 @@ class MainActivity : AppCompatActivity() {
             var progress = mainWidthSeekBar.progress
             if (progress >= 0) {
                 progress--
-                sendMessage(BleData(BleAction.CHANGE_WIDTH, progress).toJson())
                 mainWidthSeekBar.progress = progress
             }
         }
@@ -516,7 +548,6 @@ class MainActivity : AppCompatActivity() {
             var progress = mainWidthSeekBar.progress
             if (progress <= 100) {
                 progress++
-                sendMessage(BleData(BleAction.CHANGE_WIDTH, progress).toJson())
                 mainWidthSeekBar.progress = progress
             }
         }
@@ -541,7 +572,7 @@ class MainActivity : AppCompatActivity() {
             var progress = mainHeightSeekBar.progress
             if (progress >= 0) {
                 progress--
-                sendMessage(BleData(BleAction.CHANGE_HEIGHT, progress).toJson())
+                sendMessage(BleData(BleAction.CHANGE_HEIGHT, progress.toString()).toJson())
                 mainHeightSeekBar.progress = progress
             }
         }
@@ -566,7 +597,7 @@ class MainActivity : AppCompatActivity() {
             var progress = mainHeightSeekBar.progress
             if (progress <= 100) {
                 progress++
-                sendMessage(BleData(BleAction.CHANGE_HEIGHT, progress).toJson())
+                sendMessage(BleData(BleAction.CHANGE_HEIGHT, progress.toString()).toJson())
                 mainHeightSeekBar.progress = progress
             }
         }
@@ -590,34 +621,86 @@ class MainActivity : AppCompatActivity() {
         mainWidthSeekBar.setOnSeekBarChangeListener(object : TSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, p2: Boolean) {
                 mainVideoView.width = maxWidth / 100 * progress
+//                sendMessage(BleData(BleAction.CHANGE_WIDTH, progress.toString()).toJson())
             }
         })
 
         mainHeightSeekBar.setOnSeekBarChangeListener(object : TSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, p2: Boolean) {
                 mainVideoView.height = maxHeight / 100 * progress
+//                sendMessage(BleData(BleAction.CHANGE_HEIGHT, progress.toString()).toJson())
             }
         })
 
         mainVideoView.setOnViewPositionChangedListener {
             ACache[this].put(ACacheConfig.POSITION, it)
-            sendMessage(BleData(BleAction.DRAG, GsonUtils.toJson(it)!!).toJson())
+            val sb = StringBuilder()
+            sb.append(it.left)
+            sb.append("#")
+            sb.append(it.top)
+            sb.append("#")
+            sb.append(it.right)
+            sb.append("#")
+            sb.append(it.bottom)
+            sb.append("#")
+            sb.append(it.width)
+            sb.append("#")
+            sb.append(it.height)
+            sendMessage(BleData(BleAction.DRAG, sb.toString()).toJson())
         }
 
         mainVideoView.setOnScaleChangedListener { width, height ->
             mainWidthSeekBar.progress = (width.toDouble() / maxWidth * 100).toInt()
             mainHeightSeekBar.progress = (height.toDouble() / maxHeight * 100).toInt()
-
-            sendMessage(BleData(BleAction.ZOOM, width).toJson())
+            sendMessage(BleData(BleAction.ZOOM, width.toString()).toJson())
         }
 
         mainRemoteControlBtn.click {
-            startActivityForResult(Intent(this, BluetoothActivity::class.java), 1001)
+            if (isLogin)
+                startActivityForResult(Intent(this, BluetoothActivity::class.java), 1001)
+            else startActivityForResult(Intent(this, LoginActivity::class.java), 1002)
+        }
+
+        mainThemeBtn.click {
+            showPopup()
         }
     }
 
+    private fun showPopup(){
+        val popupWindow = PopupWindow()
+        val popupView = layoutInflater.inflate(R.layout.include_popup, null, false)
+        popupView.popupRv.layoutManager = LinearLayoutManager(this)
+        val popupAdapter = PopupAdapter(this, colors)
+        popupAdapter.setOnColorSelectedListener { color, position ->
+            setTheme(color)
+            sendMessage(BleData(BleAction.SWITCH_THEME, position.toString()).toJson())
+            popupWindow.dismiss()
+        }
+        popupView.popupRv.adapter = popupAdapter
+        popupWindow.contentView = popupView
+        popupWindow.isOutsideTouchable = true
+        popupWindow.width = DisplayUtils.dp2px(this, 100F)
+        popupWindow.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        popupWindow.setBackgroundDrawable(ColorDrawable())
+        popupWindow.showAsDropDown(mainThemeBtn)
+    }
+
+    private fun setTheme(color: Color){
+        mainFrame.setBackgroundColor(ContextCompat.getColor(this, color.colorRes))
+        mainThemeBtn.setTextColor(ContextCompat.getColor(this, color.textColorRes))
+        mainRemoteControlBtn.setTextColor(ContextCompat.getColor(this, color.textColorRes))
+        mainWidthTitleTv.setTextColor(ContextCompat.getColor(this, color.textColorRes))
+        mainHeightTitleTv.setTextColor(ContextCompat.getColor(this, color.textColorRes))
+    }
+
+    private var isLogin = false
+
     private fun useCache() {
         //读取缓存video属性
+        if (viewPosition!!.width == 0)
+            viewPosition!!.width = DisplayUtils.dp2px(this, 214F)
+        if (viewPosition!!.height == 0)
+            viewPosition!!.height = DisplayUtils.dp2px(this, 120F)
         mainWidthSeekBar.progress = (viewPosition!!.width.toDouble() / maxWidth * 100).toInt()
         mainHeightSeekBar.progress = (viewPosition!!.height.toDouble() / maxHeight * 100).toInt()
         val lp = mainVideoView.layoutParams as FrameLayout.LayoutParams
@@ -643,7 +726,7 @@ class MainActivity : AppCompatActivity() {
 
     private var timingDisposable: Disposable? = null
     private fun startTimingGoneControlArea() {
-        timingDisposable = Observable.timer(10, TimeUnit.SECONDS)
+        timingDisposable = Observable.timer(7, TimeUnit.SECONDS)
             .compose(TransformUtils.defaultSchedulers())
             .subscribe({
                 controlAreaIsShowing = false
@@ -664,6 +747,10 @@ class MainActivity : AppCompatActivity() {
                         LogUtils.d("选择蓝牙:${device?.address}")
                         stopAdvertising()
                         initBluetoothConnect(device?.address!!)
+                    }
+                    1002 -> {
+                        isLogin = true
+                        startActivityForResult(Intent(this, BluetoothActivity::class.java), 1001)
                     }
                     10086 -> {
                         startAdvertising()

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.cbsd.libra.view.DragLayout
+            android:id="@+id/mainVideoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <VideoView
+                android:id="@+id/mainVideoView"
+                android:layout_width="@dimen/default_width"
+                android:layout_height="@dimen/default_height"
+                android:layout_centerInParent="true"/>
+
+        </com.cbsd.libra.view.DragLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mainRemoteControlBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@color/transparent"
+            android:text="远程控制"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mainRv"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            tools:background="@color/gray_20" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/mainLpControlContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/mainUpBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:src="@mipmap/icon_top_arrow"
+                        android:padding="5dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/mainLeftBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:padding="5dp"
+                        android:layout_marginEnd="15dp"
+                        android:src="@mipmap/icon_left_arrow"
+                        app:layout_constraintEnd_toStartOf="@id/mainLeftHintBtn"
+                        app:layout_constraintTop_toTopOf="@id/mainLeftHintBtn" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/mainLeftHintBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:src="@mipmap/icon_left_arrow"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/mainUpBtn" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/mainRightBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:layout_marginStart="15dp"
+                        android:padding="5dp"
+                        android:src="@mipmap/icon_right_arrow"
+                        app:layout_constraintStart_toEndOf="@id/mainLeftHintBtn"
+                        app:layout_constraintTop_toTopOf="@id/mainLeftHintBtn" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/mainBottomBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:padding="5dp"
+                        android:src="@mipmap/icon_bottom_arrow"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/mainLeftBtn" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="宽度"
+                            android:textColor="#343434"
+                            android:textSize="16sp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/mainWidthLessBtn"
+                            android:layout_width="46dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/selector_normal_button"
+                            android:textStyle="bold"
+                            android:text="-"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <androidx.appcompat.widget.AppCompatSeekBar
+                            android:id="@+id/mainWidthSeekBar"
+                            style="@style/SeekBarStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:thumb="@mipmap/icon_thumb"
+                            android:layout_weight="1"
+                            tools:progress="20" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/mainWidthAddBtn"
+                            android:layout_width="46dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/selector_normal_button"
+                            android:textStyle="bold"
+                            android:text="+"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="高度"
+                            android:textColor="#343434"
+                            android:textSize="16sp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/mainHeightLessBtn"
+                            android:layout_width="46dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/selector_normal_button"
+                            android:textStyle="bold"
+                            android:text="+"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <androidx.appcompat.widget.AppCompatSeekBar
+                            android:id="@+id/mainHeightSeekBar"
+                            style="@style/SeekBarStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:thumb="@mipmap/icon_thumb"
+                            android:layout_weight="1"
+                            tools:progress="20" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/mainHeightAddBtn"
+                            android:layout_width="46dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/selector_normal_button"
+                            android:textStyle="bold"
+                            android:text="-"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</FrameLayout>

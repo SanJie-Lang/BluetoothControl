@@ -89,7 +89,6 @@ class BleScanHelper(context: Context) {
         mScanCallback = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult?) {
                 super.onScanResult(callbackType, result)
-                LogUtils.d("蓝牙扫描到蓝牙 >= 5.0")
                 //post出去  尽快结束回调
                 mMainHandler.post {
                     result?.let {
@@ -115,7 +114,6 @@ class BleScanHelper(context: Context) {
         }
         //5.0以下扫描回调
         mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            LogUtils.d("蓝牙扫描到蓝牙 < 5.0")
             mMainHandler.post {
                 if (device != null && scanRecord != null) {
                     //扫描回调

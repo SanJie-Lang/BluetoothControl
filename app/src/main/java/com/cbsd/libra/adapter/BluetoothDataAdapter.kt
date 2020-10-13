@@ -40,10 +40,11 @@ class BluetoothDataAdapter(private val mContext: Context, private val bluetoothL
         }
         holder.itemView.itemBluetoothMacTv.text = when(device.address.isNullOrEmpty()){
             true -> ""
-            else -> when(device.bondState == 10){
-                true -> "${device.address}\u3000（已配对）"
-                else -> "${device.address}\u3000（未配对）"
-            }
+//            else -> when(device.bondState == 10){
+//                true -> "${device.address}\u3000（已配对）"
+//                else -> "${device.address}\u3000（未配对）"
+//            }
+            else -> device.address
         }
         holder.itemView.itemBluetoothConnectBtn.click {
             onItemClickListener?.onItemClick(device, position)

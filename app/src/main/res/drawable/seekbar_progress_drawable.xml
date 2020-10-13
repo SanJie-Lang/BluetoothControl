@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
-    <!--定义seekbar滑动条的底色-->
-    <item android:id="@android:id/background">
-        <shape>
-            <corners android:radius="5dp" />
-            <gradient
-                android:angle="270"
-                android:centerColor="#eeeff3"
-                android:centerY="0.75"
-                android:endColor="#eeeff3"
-                android:startColor="#eeeff3" />
+    <item
+        android:id="@android:id/background"
+        android:gravity="center_vertical|fill_horizontal">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp"/>
+            <size android:height="15dp"/>
+            <solid android:color="@color/gray_40"/>
         </shape>
     </item>
-    <!--定义seekbar滑动条进度颜色-->
-    <item android:id="@android:id/progress">
+
+    <item
+        android:id="@android:id/secondaryProgress"
+        android:gravity="center_vertical|fill_horizontal">
         <clip>
-            <shape>
+            <shape android:shape="rectangle">
+
                 <corners android:radius="5dp"/>
-                <solid android:color="#FD5655"/>
+                <size android:height="15dp"/>
+                <solid android:color="#1EB6B2"/>
+            </shape>
+        </clip>
+    </item>
+
+    <item
+        android:id="@android:id/progress"
+        android:gravity="center_vertical|fill_horizontal">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="5dp"/>
+                <size android:height="15dp"/>
+                <solid android:color="#1EB6B2"/>
             </shape>
         </clip>
     </item>

@@ -12,9 +12,9 @@
       "filters": [],
       "properties": [],
       "versionCode": 1,
-      "versionName": "1.0",
+      "versionName": "1.0.1",
       "enabled": true,
-      "outputFile": "app-1.0-release.apk"
+      "outputFile": "bluetooth-app-1.0.1-release.apk"
     }
   ]
 }

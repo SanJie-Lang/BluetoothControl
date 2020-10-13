@@ -2,7 +2,6 @@ package com.cbsd.libra.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.VideoView
 import com.cbsd.libra.model.ViewPosition
 import com.cbsd.libra.utils.LogUtils
+import kotlin.math.sqrt
 
 class DragVideoView : VideoView, ScaleGestureDetector.OnScaleGestureListener{
 
@@ -17,6 +17,7 @@ class DragVideoView : VideoView, ScaleGestureDetector.OnScaleGestureListener{
     private var lastY = 0
     private var startScaleX = 0F
     private var startScaleY = 0F
+
 
     private var viewPosition: ViewPosition = ViewPosition(left, top, right, bottom, width, height)
 
@@ -36,14 +37,13 @@ class DragVideoView : VideoView, ScaleGestureDetector.OnScaleGestureListener{
         val h = View.getDefaultSize(width, heightMeasureSpec)
         setMeasuredDimension(w, h)
     }
-
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val cnt = ev!!.pointerCount
-        val startX = ev.x.toInt()
-        val startY = ev.y.toInt()
         when (cnt) {
             1 -> {
                 //单点 拖动
+                val startX = ev.x.toInt()
+                val startY = ev.y.toInt()
                 when (ev.action) {
                     MotionEvent.ACTION_UP -> {
                         val lp = layoutParams as FrameLayout.LayoutParams
@@ -76,19 +76,54 @@ class DragVideoView : VideoView, ScaleGestureDetector.OnScaleGestureListener{
                 }
             }
             2 -> {
-                //双点 缩放
+//                //双点 缩放
+//                when (ev.action) {
+//                    MotionEvent.ACTION_POINTER_DOWN -> {
+//                        spacing = getSpacing(ev)
+//                        degree = getDegree(ev)
+//                        LogUtils.d("ACTION_POINTER_DOWN")
+//                    }
+//                    MotionEvent.ACTION_MOVE -> {
+//                        scale = scale * getSpacing(ev) / spacing
+//                        if (scale < -3.4)
+//                            scale = -3.5F
+//                        if (scale > 3.402)
+//                            scale = 3.4F
+//                        LogUtils.d("缩放scale:$scale , ${getSpacing(ev)}, $spacing")
+//                        scaleX = scale
+//                        scaleY = scale
+////                        rota = rota + getDegree(ev) - degree
+////                        if (rota > 360){
+////                            rota -= 360
+////                        }
+////                        if (rota < -360){
+////                            rota += 360
+////                        }
+////                        rotation = rota
+//                    }
+//                }
             }
         }
         return if (cnt == 1) true else gestureDetector.onTouchEvent(ev)
+//        return super.onTouchEvent(ev)
+//        return true
     }
 
+    private var spacing = 0f
+    private var mScale = 1f // 伸缩比例
+
     override fun onScale(detector: ScaleGestureDetector?): Boolean {
-        LogUtils.d("dragVideo onScale")
         val factor = detector!!.scaleFactor
         val diffX = detector.currentSpanX - startScaleX
         val diffY = detector.currentSpanY - startScaleY
+
+        mScale = mScale * sqrt(x * x + y * y.toDouble()).toFloat() / 3 / spacing
+
         val lp = layoutParams as FrameLayout.LayoutParams
-        onScaleChangedListener?.onScaleChanged(lp.width + diffX.toInt() / 10, lp.height + diffY.toInt() / 10)
+        onScaleChangedListener?.onScaleChanged(
+            lp.width + diffX.toInt() / 3,
+            lp.height + diffY.toInt() / 3
+        )
         return true
     }
 
@@ -102,6 +137,14 @@ class DragVideoView : VideoView, ScaleGestureDetector.OnScaleGestureListener{
 
     override fun onScaleEnd(detector: ScaleGestureDetector?) {
         LogUtils.d("dragVideo onScaleEnd")
+    }
+
+    // 触碰两点间距离
+    private fun getSpacing(event: MotionEvent): Float {
+        //通过三角函数得到两点间的距离
+        val x = event.getX(0) - event.getX(1)
+        val y = event.getY(0) - event.getY(1)
+        return Math.sqrt(x * x + y * y.toDouble()).toFloat()
     }
 
     /**

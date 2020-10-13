@@ -10,18 +10,18 @@
 
     <com.cbsd.libra.view.RadiusImageView
         android:id="@+id/itemVideoCoverIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"
-        app:radius="5dp"/>
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/img_video_1"
+        app:radius="8dp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/itemVideoNameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@color/white"
-        tools:textColor="@color/black"
+        android:textColor="#343434"
         tools:text="视频一"
         android:padding="5dp"/>
 
